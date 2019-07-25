@@ -93,7 +93,6 @@ namespace FileCommander
 
             ShowLineInPosition(left, top, top_str);
             //-----------------------------------
-
             string mid_str = "" + dbl_vert;
             for (int i = 0; i < width - 2; i++)
             {
@@ -106,7 +105,6 @@ namespace FileCommander
                 ShowLineInPosition(left, top+i+1, mid_str);
             }
             //-----------------------------------
-
             string bottom_str = "" + down_left;
             for (int i = 0; i < width - 2; i++)
             {
@@ -116,7 +114,6 @@ namespace FileCommander
 
             ShowLineInPosition(left, top + height - 2, bottom_str);
             //-----------------------------------
-
             string mid_line = "" + '\u255F';
             for (int i = 0; i < width - 2; i++)
             {
@@ -151,9 +148,7 @@ namespace FileCommander
             ConsoleColor tmp = Console.ForegroundColor;
             if (isDir) Console.ForegroundColor = ConsoleColor.White;
             if (isFile) Console.ForegroundColor = ConsoleColor.Green;
-
             ShowLineInPosition(left + 1, top + 4 + i, itemLine, isSelect);
-
             Console.ForegroundColor = tmp;
         }
 
