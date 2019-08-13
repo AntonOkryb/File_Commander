@@ -8,15 +8,15 @@ namespace FileCommander
 {
     class CLocalMenu
     {
-        List<string> items;
-        int left, top, width, height;
-        int maxWidth;
-        int maxHeight;
-        int selectedIdx;
-        int start = 0;
-        ConsoleColor bkColor = ConsoleColor.DarkGreen;
-        ConsoleColor frColor = ConsoleColor.Gray;
-        ConsoleColor selBkColor = ConsoleColor.Gray;
+        private List<string> items;
+        private int left, top, width, height;
+        private  int maxWidth;
+        private int maxHeight;
+        private int selectedIdx;
+        private int start = 0;
+        private ConsoleColor bkColor = ConsoleColor.DarkGreen;
+        private ConsoleColor frColor = ConsoleColor.Gray;
+        private ConsoleColor selBkColor = ConsoleColor.Gray;
         ConsoleColor selFrColor = ConsoleColor.Black;
 
         public CLocalMenu(int left, int top, int maxWidth, int maxHeight, params string[] items)

@@ -47,6 +47,34 @@ namespace FileCommander
                 File.Copy(newPath, newPath.Replace(SourcePath, DestinationPath), true);
         }
 
+        static public long GetFolderSizeInBytes(string folderFullName)
+        {
+            long sum = 0;
+            try
+            {
+                string[] D = Directory.GetFiles(folderFullName, "*.*", SearchOption.AllDirectories);
+                foreach (string newPath in D)
+                {
+                    FileInfo fileInfo = new FileInfo(newPath);
+                    sum += fileInfo.Length;
+                }
+            }
+            catch { }
+            return sum;
+        }
+
+        static public long GetNumberOfFilesInFolder(string folderFullName)
+        {
+            long cnt = 0;
+            try
+            {
+                string[] dirFilesFullNames = Directory.GetFiles(folderFullName, "*.*", SearchOption.AllDirectories);
+                cnt = dirFilesFullNames.Length;
+            }
+            catch { }
+            return cnt;
+        }
+
         static public void ShowFrame(int left, int top, int width, int height,
             ConsoleColor bkColor = ConsoleColor.Blue,
             ConsoleColor frColor = ConsoleColor.Black
@@ -64,9 +92,9 @@ namespace FileCommander
                 top_str += dbl_horz;
             }
             top_str += up_right;
+
             ShowLineInPosition(left, top, top_str, bkColor, frColor);
             string mid_str = "" + dbl_vert;
-
             for (int i = 0; i < width - 2; i++)
             {
                 mid_str += " ";
@@ -87,10 +115,9 @@ namespace FileCommander
             ShowLineInPosition(left, top + height - 1, bottom_str, bkColor, frColor);
         }
 
-        static public void ShowLineInPosition(int left, int top, string Line, 
-            ConsoleColor bkColor=ConsoleColor.Blue, 
-            ConsoleColor frColor = ConsoleColor.Black
-            )
+        static public void ShowLineInPosition(int left, int top, string Line,
+            ConsoleColor bkColor = ConsoleColor.Blue,
+            ConsoleColor frColor = ConsoleColor.Black)
         {
             ConsoleColor tmpBkColor = Console.BackgroundColor;
             ConsoleColor tmpFrColor = Console.ForegroundColor;
@@ -160,4 +187,5 @@ namespace FileCommander
         }
     }
 }
+
 

@@ -20,35 +20,11 @@ namespace FileCommander
 
         static void Main(string[] args)
         {
-            Console.Title = "FileCommander";
-            Console.WindowHeight = m;
-            Console.WindowWidth = n;
-            Console.BufferHeight = m;
-            Console.BufferWidth = n;
-            Console.BackgroundColor = ConsoleColor.DarkBlue;
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.Clear();
-
-            panel1 = new CPanel(0, 0, n/2, m-1);
-            panel2 = new CPanel(n/2, 0, n/2, m-1);
-
-            panel1.isActive = true;
-            panel2.isActive = false;
-
-            panel1.Show();
-            panel2.Show();
-            ShowHelpLine();
-            SetCursorToCommandLine();
+            CommanderInit();
 
             while (true)
             {
-                active_panel = panel1;
-                passive_panel = panel2;
-                if (panel2.isActive)
-                {
-                    active_panel = panel2;
-                    passive_panel = panel1;
-                }
+                DetermWhichPanelIsActive();
 
                 ConsoleKeyInfo keyInfo = Console.ReadKey();
                 ConsoleKey key = keyInfo.Key;
@@ -71,40 +47,41 @@ namespace FileCommander
                 {
                     active_panel.ProcessCurrentItem();
                 }
-                else if ((key == ConsoleKey.F1) && (modifiers & ConsoleModifiers.Alt) != 0) // Copy
+                else if ((key == ConsoleKey.F1) && (modifiers & ConsoleModifiers.Alt) != 0)
                 {
                     panel1.SelectDrive();
                 }
-                else if (key == ConsoleKey.F1) // Help
+                else if (key == ConsoleKey.F1)
                 {
                     string[] helpLines =
                     {
                         " This is Help",
-                        "For our Commander."
+                        "Alt+F1-list of drives on left panel",
+                        "Alt+F2-list of drives on right panel"
                     };
-                    CLocalMenu help = new CLocalMenu(25, 10, 20, 15 ,helpLines);
+                    CLocalMenu help = new CLocalMenu(1, 10, 50, 25, helpLines);
                     help.Work();
                     panel1.Refresh();
                     panel2.Refresh();
                 }
-                else if ((key == ConsoleKey.F2) && (modifiers & ConsoleModifiers.Alt) != 0) // Copy
+                else if ((key == ConsoleKey.F2) && (modifiers & ConsoleModifiers.Alt) != 0)
                 {
                     panel2.SelectDrive();
                 }
-                else if (key == ConsoleKey.F2) // Rename
+                else if (key == ConsoleKey.F2)
                 {
                     DoRename();
                 }
-                else if (key == ConsoleKey.F3) // View
+                else if (key == ConsoleKey.F3)
                 {
                     string path = active_panel.GetCurrentItemPath();
                     var dirItemInfo = CCommon.GetDirectoryItemInfo(path);
-                    CLocalMenu dirItemInfoShow = new CLocalMenu(3, 3, n/2, m-5, dirItemInfo);
+                    CLocalMenu dirItemInfoShow = new CLocalMenu(3, 3, n / 2, m - 5, dirItemInfo);
                     dirItemInfoShow.Work();
                     panel1.Refresh();
                     panel2.Refresh();
                 }
-                else if ((key == ConsoleKey.F4) && (modifiers & ConsoleModifiers.Shift) != 0)
+                else if ((key == ConsoleKey.F4) && (modifiers & ConsoleModifiers.Shift) != 0) 
                 {
                     DoNewFile();
                 }
@@ -116,7 +93,7 @@ namespace FileCommander
                 {
                     DoCopy();
                 }
-                else if (key == ConsoleKey.Escape) 
+                else if (key == ConsoleKey.Escape)
                 {
                     break;
                 }
@@ -132,9 +109,44 @@ namespace FileCommander
                 {
                     DoDelete();
                 }
+                else if (key == ConsoleKey.Spacebar)
+                {
+                    active_panel.ShowSizeOfCurrentItem();
+                }
                 SetCursorToCommandLine();
             }
+        }
+
+        static void CommanderInit()
+        {
+            Console.Title = "FileCommander";
+            Console.WindowHeight = m;
+            Console.WindowWidth = n;
+            Console.BufferHeight = m;
+            Console.BufferWidth = n;
+            Console.BackgroundColor = ConsoleColor.DarkBlue;
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Clear();
+            panel1 = new CPanel(0, 0, n / 2, m - 1);
+            panel2 = new CPanel(n / 2, 0, n / 2, m - 1);
+            panel1.isActive = true;
+            panel2.isActive = false;
+            panel1.Show();
+            panel2.Show();
+
             ShowHelpLine();
+            SetCursorToCommandLine();
+        }
+
+        static void DetermWhichPanelIsActive()
+        {
+            active_panel = panel1;
+            passive_panel = panel2;
+            if (panel2.isActive)
+            {
+                active_panel = panel2;
+                passive_panel = panel1;
+            }
         }
 
         static private void DoCopy()
@@ -162,7 +174,6 @@ namespace FileCommander
             string srcPath = active_panel.GetPath();
             string dstPath = passive_panel.GetPath();
             if (srcPath == dstPath) return;
-
             string srcFullName = active_panel.GetCurrentItemPath();
             string dstFullName = dstPath + Path.GetFileName(srcFullName);
 
@@ -170,13 +181,14 @@ namespace FileCommander
             {
                 try
                 {
-                    File.Move(srcFullName, dstFullName); 
+                    File.Move(srcFullName, dstFullName);
                 }
                 catch (IOException ex)
                 {
                     Console.WriteLine(ex.Message);
                 }
             }
+
             if (CCommon.IsDir(srcFullName))
             {
                 try
@@ -186,9 +198,10 @@ namespace FileCommander
                 }
                 catch (IOException ex)
                 {
-                    Console.WriteLine(ex.Message); 
+                    Console.WriteLine(ex.Message);
                 }
             }
+
             panel1.Refresh();
             panel2.Refresh();
         }
@@ -196,6 +209,7 @@ namespace FileCommander
         static private void DoRename()
         {
             string oldname = active_panel.GetCurrentItemPath();
+
             Console.Write("New name: ");
             string newname = active_panel.GetPath() + Console.ReadLine();
             ClearCommandLine();
@@ -232,6 +246,7 @@ namespace FileCommander
             Console.Write("New dir name: ");
             string newDirName = active_panel.GetPath() + Console.ReadLine();
             ClearCommandLine();
+
             if (!Directory.Exists(newDirName))
             {
                 Directory.CreateDirectory(newDirName);
@@ -251,8 +266,10 @@ namespace FileCommander
             {
                 Directory.Delete(name, true);
             }
+
             active_panel.Refresh();
         }
+
         static private void SetCursorToCommandLine()
         {
             Console.SetCursorPosition(0, m - 2);
@@ -275,7 +292,7 @@ namespace FileCommander
         {
             string helpLine = "";
             helpLine += " F1-Help  F2-ReName  F3-View  F4-Edit  F5-Copy  F6-Move  F7-MkDir  F8-Delete";
-            CCommon.ShowLineInPosition(0, m-1, helpLine, ConsoleColor.DarkBlue, ConsoleColor.Gray);
+            CCommon.ShowLineInPosition(0, m - 1, helpLine, ConsoleColor.DarkBlue, ConsoleColor.Gray);
         }
     }
 }
