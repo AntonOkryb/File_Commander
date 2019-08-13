@@ -32,8 +32,8 @@ namespace FileCommander
 
                 if (key == ConsoleKey.Tab)
                 {
-                    panel1.isActive = !panel1.isActive;
-                    panel2.isActive = !panel2.isActive;
+                    panel1.IsActive = !panel1.IsActive;
+                    panel2.IsActive = !panel2.IsActive;
                 }
                 else if (key == ConsoleKey.DownArrow)
                 {
@@ -129,8 +129,8 @@ namespace FileCommander
             Console.Clear();
             panel1 = new CPanel(0, 0, n / 2, m - 1);
             panel2 = new CPanel(n / 2, 0, n / 2, m - 1);
-            panel1.isActive = true;
-            panel2.isActive = false;
+            panel1.IsActive = true;
+            panel2.IsActive = false;
             panel1.Show();
             panel2.Show();
 
@@ -142,7 +142,7 @@ namespace FileCommander
         {
             active_panel = panel1;
             passive_panel = panel2;
-            if (panel2.isActive)
+            if (panel2.IsActive)
             {
                 active_panel = panel2;
                 passive_panel = panel1;

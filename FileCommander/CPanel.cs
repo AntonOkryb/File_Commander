@@ -20,7 +20,7 @@ namespace FileCommander
         private string path;
         private string[] directoryItems;
         private bool is_active = false;
-        public bool isActive
+        public bool IsActive
         {
             set
             {
@@ -213,7 +213,7 @@ namespace FileCommander
         private void ShowLineInPosition(int left, int top, string Line, bool isSelect = false)
         {
             ConsoleColor tmp = ConsoleColor.Black;
-            if (isSelect && isActive)
+            if (isSelect && IsActive)
             {
                 tmp = Console.BackgroundColor;
                 Console.BackgroundColor = ConsoleColor.Gray;
@@ -222,7 +222,7 @@ namespace FileCommander
             Console.SetCursorPosition(left, top);
             Console.Write(Line);
 
-            if (isSelect && isActive)
+            if (isSelect && IsActive)
             {
                 Console.BackgroundColor = tmp;
             }
